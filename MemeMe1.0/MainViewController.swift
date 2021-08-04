@@ -10,6 +10,8 @@ import UIKit
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITabBarDelegate  {
 
     
+    
+    
     // MARK: UI component variables
     @IBOutlet weak var topNavBar: UINavigationBar!
     @IBOutlet weak var share: UIBarItem!
@@ -17,12 +19,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var topTextField: UITextField!
     @IBOutlet weak var bottomTextField: UITextField!
-    @IBOutlet weak var bottomTabBarr: UITabBar!
+    @IBOutlet weak var bottomTabBar: UITabBar!
     @IBOutlet weak var camera: UITabBarItem!
     @IBOutlet weak var album: UIBarItem!
     
     var activeField: UITextField?
     var memedImage: UIImage!
+    
+    
     
     
     // MARK: Default constants
@@ -33,13 +37,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     let imagePicker = UIImagePickerController()
     
     
+    
+    
     // MARK: required Meme struct
-    struct Meme {
+    internal struct Meme {
         let topText: String
         let bottomText: String
         let originalImage: UIImage
         let memedImage: UIImage
     }
+    
+    
     
     
     // MARK: Inherent Controller Methods
@@ -50,8 +58,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let memeTextAttributes: [NSAttributedString.Key: Any] = [
             NSAttributedString.Key.strokeColor: UIColor.black,
             NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(1),
-//            NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
-            NSAttributedString.Key.font: UIFont(name: "Impact", size: 40)!,
+            NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
             NSAttributedString.Key.strokeWidth: -5.0,
         ]
         
@@ -59,17 +66,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         topTextField.defaultTextAttributes = memeTextAttributes
         topTextField.textAlignment = .center
         topTextField.tintColor = .black
-//        topTextField.font = UIFont(name: "impact", size: 34)
         topTextField.delegate = self
         
         bottomTextField.text = bottomDefaultTxt
         bottomTextField.defaultTextAttributes = memeTextAttributes
         bottomTextField.textAlignment = .center
         bottomTextField.tintColor = .black
-//        bottomTextField.font = UIFont(name: "impact", size: 34)
         bottomTextField.delegate = self
         
-        bottomTabBarr.delegate = self
+        bottomTabBar.delegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -92,15 +97,36 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         
-        // TODO - handle UI on device orientation change
-        print(UIDevice.current.orientation.isLandscape)
+        // testing handle UI on device orientation change
+        // print(UIDevice.current.orientation.isLandscape)
     }
 
     
+    
+    
     // MARK: Top nav bar methods
+    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        
+        if (item === camera) {
+            launchController(sourceType: .camera)
+        } else if (item === album) {
+            launchController(sourceType: .photoLibrary)
+        }
+    }
+    
+    // Combined function to pick an image from an Album or the Camera app
+    func launchController(sourceType: UIImagePickerController.SourceType) {
+     
+        imagePicker.delegate = self
+        imagePicker.sourceType = sourceType
+        // added the ability to crop the image
+        imagePicker.allowsEditing = true
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+        if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
             imageView.image = image
             imageView.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -112,34 +138,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         dismiss(animated: true, completion: nil)
     }
     
-    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
-        
-        if (item === camera) {
-            pickAnImageFromCamera(tabBar)
-        } else if (item === album) {
-            pickAnImage(tabBar)
-        }
-    }
-    
-    // Function to pick an image from an Album
-    func pickAnImage(_ sender: Any) {
-        
-        pickerController.delegate = self
-        pickerController.sourceType = .photoLibrary
-        present(pickerController, animated: true, completion: nil)
-    }
-    
-    // Function to pick an image newly clicked using Camera app
-    func pickAnImageFromCamera(_ sender: Any) {
-        
-        imagePicker.delegate = self
-        imagePicker.sourceType = .camera
-        present(imagePicker, animated: true, completion: nil)
-    }
-    
     func didCancel(_ sender: Any) {
         
     }
+    
+    
+    
     
     // MARK: Text field functions
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
@@ -163,6 +167,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func textFieldDidEndEditing(_ textField: UITextField){
         activeField = nil
     }
+    
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        // TODO
+//    }
+    
+    
     
     
     // MARK: Keyboard subscription functions called on the text fields
@@ -213,6 +223,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     
+    
+    
     // MARK: Save/Share functions
     func save() {
         
@@ -224,7 +236,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
         // TODO: Hide toolbar and navbar
         topNavBar.isHidden = true
-        bottomTabBarr.isHidden = true
+        bottomTabBar.isHidden = true
         
         // Render view to an image
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -234,7 +246,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
         // TODO: Show toolbar and navbar
         topNavBar.isHidden = false
-        bottomTabBarr.isHidden = false
+        bottomTabBar.isHidden = false
         
         return memedImage
     }

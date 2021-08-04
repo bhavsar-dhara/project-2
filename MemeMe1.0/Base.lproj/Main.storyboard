@@ -58,9 +58,9 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="BOTTOM" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lIL-o4-uq6" userLabel="Bottom Text Field">
-                                <rect key="frame" x="10" y="724.5" width="394" height="18.5"/>
+                                <rect key="frame" x="10" y="725" width="394" height="18"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" name="Impact" family="Impact" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters"/>
                             </textField>
                         </subviews>
@@ -133,7 +133,7 @@
                     </view>
                     <connections>
                         <outlet property="album" destination="cO2-Z3-H3V" id="qmD-p6-iwo"/>
-                        <outlet property="bottomTabBarr" destination="G1O-KV-edN" id="1lI-bl-Hl4"/>
+                        <outlet property="bottomTabBar" destination="G1O-KV-edN" id="1lI-bl-Hl4"/>
                         <outlet property="bottomTextField" destination="lIL-o4-uq6" id="BP9-8x-LRa"/>
                         <outlet property="camera" destination="Uzp-PU-fPH" id="rJW-3Y-D8M"/>
                         <outlet property="cancel" destination="gmz-Uy-lhe" id="MeZ-my-dEx"/>
