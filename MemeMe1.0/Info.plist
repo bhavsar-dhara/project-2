@@ -57,6 +57,8 @@
 	</array>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>This permission is required to save your generated memes</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This permission is required to click images before converting them into memes</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

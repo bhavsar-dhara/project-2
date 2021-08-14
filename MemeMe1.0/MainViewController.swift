@@ -32,8 +32,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     // MARK: Default constants
     let topDefaultTxt = "TOP"
     let bottomDefaultTxt = "BOTTOM"
-    
-    let pickerController = UIImagePickerController()
     let imagePicker = UIImagePickerController()
     
     
@@ -117,11 +115,31 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     // Combined function to pick an image from an Album or the Camera app
     func launchController(sourceType: UIImagePickerController.SourceType) {
      
+        print("LaunchController sourceType = ", sourceType)
         imagePicker.delegate = self
         imagePicker.sourceType = sourceType
         // added the ability to crop the image
         imagePicker.allowsEditing = true
-        present(imagePicker, animated: true, completion: nil)
+        // present(imagePicker, animated: true, completion: nil)
+        
+        //for iPhone
+        if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone {
+            present(imagePicker, animated: true, completion: nil)
+        }
+        //for iPad
+        else if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad {
+            // Change Rect as required
+            present(imagePicker, animated: true, completion: nil)
+            
+            if let popOver = imagePicker.popoverPresentationController {
+                popOver.permittedArrowDirections = UIPopoverArrowDirection.up
+                popOver.sourceView = self.view
+                //popOver.sourceRect =
+                //popOver.barButtonItem
+            }
+        } else {
+            print("Not an iPhone or iPad - Unspecified device")
+        }
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -164,7 +182,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         activeField = textField
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField){
+    func textFieldDidEndEditing(_ textField: UITextField) {
         activeField = nil
     }
     
@@ -259,9 +277,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         // define an instance of the ActivityViewController
         // pass the ActivityViewController a memedImage as an activity item
         let activityController = UIActivityViewController(activityItems: [self.memedImage!], applicationActivities: nil)
-        
+                    
         // present the ActivityViewController
         present(activityController, animated: true, completion: nil)
+        
+        if let popOver = activityController.popoverPresentationController {
+            popOver.permittedArrowDirections = UIPopoverArrowDirection.up
+            popOver.sourceView = self.view
+            //popOver.sourceRect =
+            //popOver.barButtonItem
+        }
+
         
         // call methods with completion item handler
         activityController.completionWithItemsHandler = {
