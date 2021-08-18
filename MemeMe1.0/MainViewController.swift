@@ -61,18 +61,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         ]
         
         topTextField.text = topDefaultTxt
-        topTextField.defaultTextAttributes = memeTextAttributes
-        topTextField.textAlignment = .center
-        topTextField.tintColor = .black
-        topTextField.delegate = self
+        setTextFieldAttributes(textfield: topTextField, attributes: memeTextAttributes)
         
         bottomTextField.text = bottomDefaultTxt
-        bottomTextField.defaultTextAttributes = memeTextAttributes
-        bottomTextField.textAlignment = .center
-        bottomTextField.tintColor = .black
-        bottomTextField.delegate = self
-        
+        setTextFieldAttributes(textfield: bottomTextField, attributes: memeTextAttributes)
+
         bottomTabBar.delegate = self
+        
+        share.isEnabled = false
+    }
+    
+    func setTextFieldAttributes(textfield: UITextField, attributes: [NSAttributedString.Key: Any]) {
+        textfield.defaultTextAttributes = attributes
+        textfield.textAlignment = .center
+        textfield.tintColor = .black
+        textfield.delegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -146,8 +149,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
             imageView.image = image
-            imageView.translatesAutoresizingMaskIntoConstraints = false
         }
+        share.isEnabled = true
         dismiss(animated: true, completion: nil)
     }
     
@@ -185,10 +188,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func textFieldDidEndEditing(_ textField: UITextField) {
         activeField = nil
     }
-    
-//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//        // TODO
-//    }
     
     
     
@@ -287,11 +286,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             //popOver.sourceRect =
             //popOver.barButtonItem
         }
-
         
         // call methods with completion item handler
         activityController.completionWithItemsHandler = {
-            
             (activityType: UIActivity.ActivityType?, completed:
            Bool, arrayReturnedItems: [Any]?, error: Error?) in
                if completed {
@@ -307,6 +304,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     print("error while sharing: \(shareError.localizedDescription)")
                }
         }
+    }
+    
+    @IBAction func cancel(_ sender: Any) {
+        print("Cancel updates")
+        
+        // add implementation to show a pop before clearing out the updates with the default
     }
 }
 
